@@ -1,10 +1,7 @@
 'use strict';
 import {
-    BaseException,
     InvalidAccessConstructorException,
     EmptyValueException,
-    InvalidValueException,
-    AbstractClassException
 } from './exceptions.js';
 
 class Coords {
@@ -13,10 +10,9 @@ class Coords {
 
     constructor(latitude, longitude) {
         if (!new.target) throw new InvalidAccessConstructorException();
-
         if (!latitude) throw new EmptyValueException("latitude");
         if (!longitude) throw new EmptyValueException("longitude");
-        
+
         this.#latitude = latitude;
         this.#longitude = longitude;
     }

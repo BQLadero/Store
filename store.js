@@ -1,10 +1,8 @@
 'use strict';
 import {
-    BaseException,
     InvalidAccessConstructorException,
     EmptyValueException,
-    InvalidValueException,
-    AbstractClassException
+    InvalidValueException
 } from './exceptions.js';
 import { Coords } from './coords.js';
 
@@ -21,6 +19,8 @@ class Store {
         if (!cif) throw new EmptyValueException("cif");
         if (!name) throw new EmptyValueException("name");
         if (!address) throw new EmptyValueException("address");
+
+        //Testeo de que el atributo phone contiene 9 números
         if (!/^[0-9]{9}$/.test(phone)) throw new InvalidValueException("phone", phone);
         if (!(coords instanceof Coords)) throw new Error("El elemento introducido no es un objecto Coordenada");
 
@@ -71,10 +71,10 @@ class Store {
         this.#coords = value;
     }
 
-    toString (){
-        return  "CIF: " + this.#cif + " Nombre: " + this.#name + " Dirección: "
-                 + this.#address + " Teléfono: " + this.#phone + " Coordenadas | Latitud: " 
-                 + this.#coords.latitude + " Coordenadas | Longitud: " + this.#coords.longitude +".";
+    toString() {
+        return "CIF: " + this.#cif + " Nombre: " + this.#name + " Dirección: "
+            + this.#address + " Teléfono: " + this.#phone + " Coordenadas | Latitud: "
+            + this.#coords.latitude + " Coordenadas | Longitud: " + this.#coords.longitude + ".";
     }
 }
 
