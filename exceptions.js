@@ -29,7 +29,7 @@ class EmptyValueException extends BaseException {
 
 //Excepción de valor inválido
 class InvalidValueException extends BaseException {
-	constructor (param, value, fileName, lineNumber){
+	constructor (param, fileName, lineNumber){
 		super('ERRROR || Error en el parametro ' + param + ' tiene un valor inválido.', fileName, lineNumber);
 		this.param = param;
 		this.name = "InvalidValueException";

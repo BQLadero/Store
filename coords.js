@@ -22,7 +22,7 @@ class Coords {
     }
 
     get latitude() {
-        return this.#title;
+        return this.#latitude;
     }
     set latitude(value) {
         if (!value) throw new EmptyValueException("latitude");

@@ -30,7 +30,6 @@ class Category {
         return this.#description;
     }
     set description(value){
-        if (!value) throw new EmptyValueException("description");
         this.#description = value;
     }
 }

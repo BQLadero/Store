@@ -12,17 +12,21 @@ class Product{
     #description;
     #tax;
     #images;
-    constructor (serialNumber, name, price, description, tax = 0, images = []){
+    constructor (serialNumber, name, price, description, tax = 0.1, images = []){
         if (!new.target) throw new InvalidAccessConstructorException();
         /*if (new.target === Product) throw new AbstractClassException("Product");*/
 
-        if (!serialNumber) throw new EmptyValueException("serialNumber");
+        if (serialNumber<0) throw new EmptyValueException("serialNumber");
 		if (!name) throw new EmptyValueException("name");
 		price = Number.parseFloat(price);
-		if (!price || price <= 0) throw new InvalidValueException("price", price);
-        /*if (!description) throw new EmptyValueException("description");
-		if (tax < 0) throw new InvalidValueException("taxPercentage", taxPercentage);
-		if (!Array.isArray(images)) throw new InvalidValueException("images", images);*/
+		if (!price || price <= 0) throw new InvalidValueException("price");
+        if (tax !== ""){
+            tax = Number.parseFloat(tax);
+            if(!tax || tax <= 0) throw new InvalidValueException("tax");
+        }
+        if (images !== ""){
+            if (!Array.isArray(images)) throw new InvalidValueException("images");
+        }
 
         this.#serialNumber = serialNumber;
         this.#name = name;
@@ -60,7 +64,6 @@ class Product{
         return this.#description;
     }
     set description(value){
-        if (!value) throw new EmptyValueException("description");
         this.#description = value;
     }
 
@@ -68,21 +71,33 @@ class Product{
         return this.#tax;
     }
     set tax(value){
-        if (!value) throw new EmptyValueException("tax");
-        this.#tax = value;
+        //Al ser opcional compruebo que no sea vacía, si es vacía lo añado
+        if (value !== ""){
+            value = Number.parseFloat(value);
+            if(!value || value <= 0) throw new InvalidValueException("tax");
+            this.#tax = value;
+        }else if (value === ""){
+            this.#tax = value;
+        }else throw new InvalidValueException("tax");
     }
 
-    get images(){
+    get images2(){
         return this.#images;
     }
-    set images(value){
-        if (!Array.isArray(value)) throw new InvalidValueException("images", value);
-        this.#images = value;
+    set images2(value){
+        //Al ser opcional compruebo que no sea vacía, si es vacía lo añados
+        if (value !== ""){
+            if (!Array.isArray(value)) throw new InvalidValueException("images");
+            this.#images = value;
+        }else if (value === ""){
+            this.#images = value;
+        }else throw new InvalidValueException("images");
+
     }
 
     toString (){
-		return "SerialNumber: " + this.serialNumber + " Nombre: " + this.name + " Precio: " + this.price + 
-                " Descripción: " + this.description + " Tax: " + this.tax + " Images: " + this.images + ".";
+		return "SerialNumber: " + this.#serialNumber + " Nombre: " + this.#name + " Precio: " + this.#price + 
+                " Descripción: " + this.#description + " Tax: " + this.#tax + " Images: " + this.#images + ".";
 	}
 }
 Object.defineProperty(Product.prototype, "serialNumber", {enumerable: true});
@@ -99,6 +114,10 @@ class Television extends Product{
     #audio;
     constructor (serialNumber, name, price, display, plataforma, video, audio, description, tax, images = []){
         super(serialNumber, name, price, description, tax, images);
+        if (!display) throw new EmptyValueException("display");
+        if (!plataforma) throw new EmptyValueException("plataforma");
+        if (!video) throw new EmptyValueException("video");
+        if (!audio) throw new EmptyValueException("audio");
         this.#display = display;
         this.#plataforma = plataforma;
         this.#video = video;
@@ -120,23 +139,24 @@ class Television extends Product{
         this.#plataforma = value;
     }
     get video(){
-        return this.#display;
+        return this.#video;
     }
     set video(value){
         if (!value) throw new EmptyValueException("video");
         this.#video = value;
     }
-    get audio(){
+    //Tengo que poner dos porque si no al mostrarlo da error
+    get audio2(){
         return this.#audio;
     }
-    set audio(value){
+    set audio2(value){
         if (!value) throw new EmptyValueException("audio");
         this.#audio = value;
     }
 
     toString (){
-		return super.toString() + " Display: " + this.display + " Plataforma: " + this.plataforma + " Video: "
-                 + this.video + " Audio: " + this.audio + ".";
+		return super.toString() + " Display: " + this.#display + " Plataforma: " + this.#plataforma + " Video: "
+                 + this.#video + " Audio: " + this.#audio + ".";
 	}
 }
 Object.defineProperty(Television.prototype, "display", {enumerable: true});
@@ -151,6 +171,10 @@ class PS5 extends Product{
     #disco;
     constructor (serialNumber, name, price, cpu, gpu, memoria, disco, description = "", tax = "", images = []){
         super(serialNumber, name, price, description, tax, images);
+        if (!cpu) throw new EmptyValueException("cpu");
+        if (!gpu) throw new EmptyValueException("gpu");
+        if (!memoria) throw new EmptyValueException("memoria");
+        if (!disco) throw new EmptyValueException("disco");
         this.#cpu = cpu;
         this.#gpu = gpu;
         this.#memoria = memoria;
@@ -178,17 +202,17 @@ class PS5 extends Product{
         if (!value) throw new EmptyValueException("memoria");
         this.#memoria = value;
     }
-    get disco(){
+    get disco2(){//Al igual que en TV que ponerlo como 2 porque sino da error
         return this.#disco;
     }
-    set disco(value){
+    set disco2(value){
         if (!value) throw new EmptyValueException("disco");
         this.#disco = value;
     }
 
     toString (){
-		return super.toString() + " CPU: " + this.cpu + " GPU: " + this.gpu + " Video: "
-                 + this.video + " Disco: " + this.disco + ".";
+		return super.toString() + " CPU: " + this.#cpu + " GPU: " + this.#gpu + " Memoria: "
+                 + this.#memoria + " Disco: " + this.#disco + ".";
     }
 }
 Object.defineProperty(PS5.prototype, "cpu", {enumerable: true});
@@ -203,6 +227,10 @@ class Router extends Product{
     #peso;
     constructor (serialNumber, name, price, conexion, puerto, antena, peso, description = "", tax = "", images = []){
         super(serialNumber, name, price, description, tax, images);
+        if (!conexion) throw new EmptyValueException("conexion");
+        if (!puerto) throw new EmptyValueException("puerto");
+        if (!antena) throw new EmptyValueException("antena");
+        if (!peso) throw new EmptyValueException("peso");
         this.#conexion = conexion;
         this.#puerto = puerto;
         this.#antena = antena;
@@ -230,17 +258,17 @@ class Router extends Product{
         if (!value) throw new EmptyValueException("antena");
         this.#antena = value;
     }
-    get peso(){
+    get peso2(){
         return this.#peso;
     }
-    set peso(value){
+    set peso2(value){
         if (!value) throw new EmptyValueException("peso");
         this.#peso = value;
     }
 
     toString (){
-		return super.toString() + " Conexión: " + this.conexion + " Puerto: " + this.puerto + " Antena: "
-                 + this.antena + " Peso: " + this.peso + ".";
+		return super.toString() + " Conexión: " + this.#conexion + " Puerto: " + this.#puerto + " Antena: "
+                 + this.#antena + " Peso: " + this.#peso + ".";
     }
 }
 Object.defineProperty(Router.prototype, "conexion", {enumerable: true});

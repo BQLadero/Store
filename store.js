@@ -59,7 +59,7 @@ class Store {
         return this.#phone;
     }
     set phone(value) {
-        if (!/^[0-9]{9}$/.test(phone)) throw new InvalidValueException("phone", phone);
+        if (!/^[0-9]{9}$/.test(value)) throw new InvalidValueException("phone");
         this.#phone = value;
     }
 
@@ -67,8 +67,14 @@ class Store {
         return this.#coords;
     }
     set coords(value) {
-        if (!(coords instanceof Coords)) throw new Error("El elemento introducido no es un objecto Coordenada");
+        if (!(value instanceof Coords)) throw new Error("El elemento introducido no es un objecto Coordenada");
         this.#coords = value;
+    }
+
+    toString (){
+        return  "CIF: " + this.#cif + " Nombre: " + this.#name + " Dirección: "
+                 + this.#address + " Teléfono: " + this.#phone + " Coordenadas | Latitud: " 
+                 + this.#coords.latitude + " Coordenadas | Longitud: " + this.#coords.longitude +".";
     }
 }
 
